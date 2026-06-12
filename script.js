@@ -1,16 +1,30 @@
-document.getElementById("date").textContent = new Date().toLocaleDateString();
+// Countdown to the World Cup opener vs Morocco (June 13, 2026)
+const kickoff = new Date("2026-06-13T00:00:00-04:00");
+function updateCountdown() {
+  const diff = kickoff - new Date();
+  const el = document.getElementById("countdown");
+  if (diff <= 0) {
+    el.textContent = "It's game time! Vai Brasil! 🇧🇷";
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  el.textContent = `${d}d ${h}h ${m}m until kickoff`;
+}
+updateCountdown();
+setInterval(updateCountdown, 30000);
 
-// Click counter
+// Confetti in Brazil colors
 let clicks = 0;
 const btn = document.getElementById("btn");
 btn.addEventListener("click", () => {
   clicks++;
   document.getElementById("count").textContent =
-    `Confetti launched ${clicks} time${clicks === 1 ? "" : "s"}`;
+    `Torcida cheered ${clicks} time${clicks === 1 ? "" : "s"}! 📣`;
   burst();
 });
 
-// Confetti
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 let particles = [];
@@ -22,16 +36,16 @@ function resize() {
 addEventListener("resize", resize);
 resize();
 
-const colors = ["#ffd166", "#ef476f", "#06d6a0", "#118ab2", "#f4a261", "#fff"];
+const colors = ["#ffdf00", "#009c3b", "#002776", "#ffffff"];
 
 function burst() {
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < 140; i++) {
     particles.push({
       x: innerWidth / 2,
-      y: innerHeight / 2,
-      vx: (Math.random() - 0.5) * 14,
-      vy: (Math.random() - 0.9) * 14,
-      size: Math.random() * 6 + 3,
+      y: innerHeight / 3,
+      vx: (Math.random() - 0.5) * 16,
+      vy: (Math.random() - 0.9) * 15,
+      size: Math.random() * 7 + 3,
       color: colors[Math.floor(Math.random() * colors.length)],
       rot: Math.random() * Math.PI,
       vr: (Math.random() - 0.5) * 0.3,
@@ -46,7 +60,7 @@ function tick() {
   for (const p of particles) {
     p.x += p.vx;
     p.y += p.vy;
-    p.vy += 0.25;          // gravity
+    p.vy += 0.25;
     p.vx *= 0.99;
     p.rot += p.vr;
     p.life -= 0.008;

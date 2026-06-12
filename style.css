@@ -1,16 +1,19 @@
 * { box-sizing: border-box; margin: 0; }
 
+:root {
+  --green: #009c3b;
+  --yellow: #ffdf00;
+  --blue: #002776;
+}
+
 body {
   font-family: system-ui, sans-serif;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(-45deg, #0f2027, #2c5364, #6a3093, #2c5364);
+  background: linear-gradient(-45deg, #00331a, var(--green), #014421, var(--blue));
   background-size: 400% 400%;
-  animation: drift 12s ease infinite;
+  animation: drift 14s ease infinite;
   color: #fff;
-  overflow: hidden;
+  text-align: center;
 }
 
 @keyframes drift {
@@ -19,33 +22,13 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-#bg {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-}
+#bg { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
 
-main {
-  position: relative;
-  text-align: center;
-  padding: 3.5rem 4rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes pop {
-  from { transform: scale(0.6); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
+header { padding: 4rem 1rem 2rem; }
 
 h1 {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-  background: linear-gradient(90deg, #ffd166, #ef476f, #06d6a0, #ffd166);
+  font-size: 4rem;
+  background: linear-gradient(90deg, var(--yellow), #fff, var(--yellow));
   background-size: 300% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -53,31 +36,92 @@ h1 {
   animation: shimmer 4s linear infinite;
 }
 
-@keyframes shimmer {
-  to { background-position: 300% center; }
+@keyframes shimmer { to { background-position: 300% center; } }
+
+.tagline { font-size: 1.3rem; margin-top: 0.5rem; opacity: 0.9; }
+
+.stars { color: var(--yellow); font-size: 1.5rem; letter-spacing: 0.5rem; margin: 1rem 0 0.5rem; }
+
+.countdown-label { opacity: 0.8; margin-top: 1rem; }
+
+#countdown { font-size: 1.6rem; font-weight: 700; color: var(--yellow); }
+
+main { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+section { margin-bottom: 3rem; }
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.2rem;
+  color: var(--yellow);
 }
 
-.tagline { font-size: 1.2rem; }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
 
-p { margin: 0.5rem 0; opacity: 0.9; }
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem 1rem;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.card h3 { margin-bottom: 0.4rem; }
+
+.card p { opacity: 0.85; font-size: 0.95rem; }
+
+.flag { font-size: 2.2rem; display: block; margin-bottom: 0.5rem; }
+
+.titles {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.titles span {
+  background: var(--yellow);
+  color: var(--blue);
+  font-weight: 800;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  font-size: 1.1rem;
+}
+
+.note { margin-top: 1rem; opacity: 0.85; }
+
+.legends { font-size: 1.1rem; line-height: 1.8; opacity: 0.9; }
 
 button {
-  margin-top: 1.5rem;
-  padding: 0.9rem 2.4rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+  padding: 1rem 2.6rem;
+  font-size: 1.15rem;
+  font-weight: 700;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(135deg, #f4a261, #e76f51);
-  color: #fff;
+  background: linear-gradient(135deg, var(--yellow), #ffb700);
+  color: var(--blue);
   cursor: pointer;
   transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 6px 20px rgba(231, 111, 81, 0.5);
+  box-shadow: 0 6px 20px rgba(255, 223, 0, 0.4);
 }
 
 button:hover {
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 30px rgba(231, 111, 81, 0.7);
+  box-shadow: 0 10px 30px rgba(255, 223, 0, 0.6);
 }
 
 button:active { transform: scale(0.97); }
+
+#count { margin-top: 0.8rem; opacity: 0.9; }
+
+footer { padding: 2rem; opacity: 0.7; }
