@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will's Zone ⚽🚗🐶</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+
+    :root { --green: #009c3b; --yellow: #ffdf00; --blue: #0a84ff; --orange: #ff7a00; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(-45deg, #0a84ff, #009c3b, #7b2ff7, #ff7a00);
+      background-size: 400% 400%;
+      animation: drift 12s ease infinite;
+      color: #fff;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    @keyframes drift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #bg { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+
+    nav { position: absolute; top: 1rem; right: 1.5rem; z-index: 20; display: flex; gap: 1rem; }
+    nav a { color: var(--yellow); font-weight: 700; text-decoration: none; }
+
+    header { padding: 4rem 1rem 1.5rem; }
+
+    h1 {
+      font-size: 4.5rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--yellow), #fff, #7bffb0, var(--yellow));
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 4s linear infinite;
+    }
+
+    @keyframes shimmer { to { background-position: 300% center; } }
+
+    .tagline { font-size: 1.3rem; margin-top: 0.5rem; opacity: 0.9; }
+
+    .ball {
+      display: inline-block;
+      font-size: 3rem;
+      animation: bounce 1.2s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-28px) rotate(180deg); }
+    }
+
+    main { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-top: 2rem; }
+
+    .card {
+      background: rgba(255, 255, 255, 0.14);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 18px;
+      padding: 1.6rem 1.2rem;
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .card:hover { transform: translateY(-8px) rotate(-1deg); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35); }
+
+    .card:active { transform: scale(0.96); }
+
+    .card .emoji { font-size: 3rem; display: block; margin-bottom: 0.6rem; }
+
+    .card h3 { font-size: 1.25rem; margin-bottom: 0.4rem; }
+
+    .card p { opacity: 0.9; font-size: 0.95rem; }
+
+    .card .pop { margin-top: 0.6rem; font-weight: 800; color: var(--yellow); min-height: 1.2em; font-size: 0.95rem; }
+
+    footer { padding: 2rem; opacity: 0.75; }
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+
+  <nav>
+    <a href="brazil.html">🏆 World Cup</a>
+    <a href="index.html">🎮 Apex</a>
+  </nav>
+
+  <header>
+    <h1>WILL'S ZONE</h1>
+    <p class="tagline">⭐ Certified legend of the household ⭐</p>
+    <div class="ball">⚽</div>
+  </header>
+
+  <main>
+    <p>Tap the cards!</p>
+    <div class="cards">
+      <div class="card" data-pop="GOOOOOOOL! 🥅">
+        <span class="emoji">🇧🇷</span>
+        <h3>Team Brazil</h3>
+        <p>Cheering for the Seleção all the way to the hexa. Five stars and counting.</p>
+        <p class="pop"></p>
+      </div>
+      <div class="card" data-pop="WHAT A SAVE! 🚀">
+        <span class="emoji">🚗</span>
+        <h3>Rocket League</h3>
+        <p>Aerials, boosts, and last-second saves. Supersonic acrobatic rocket-powered battle cars.</p>
+        <p class="pop"></p>
+      </div>
+      <div class="card" data-pop="WOOF WOOF! 🦴">
+        <span class="emoji">🐶</span>
+        <h3>The Maltipoo</h3>
+        <p>The fluffiest teammate in the house. 10/10 best boy energy.</p>
+        <p class="pop"></p>
+      </div>
+      <div class="card" data-pop="CRUNCH! 🥣">
+        <span class="emoji">🥣</span>
+        <h3>Cap'n Crunch</h3>
+        <p>Breakfast of champions. Stays crunchy through extra time and penalties.</p>
+        <p class="pop"></p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Made for Will 💛 · Brazil plays next at the <a href="brazil.html" style="color:var(--yellow)">World Cup tracker</a></p>
+  </footer>
+
+  <script>
+    // Confetti
+    const canvas = document.getElementById("bg");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+    addEventListener("resize", resize);
+    resize();
+
+    const colors = ["#ffdf00", "#009c3b", "#0a84ff", "#ff7a00", "#ffffff"];
+
+    function burst(x, y) {
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x, y,
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.85) * 13,
+          size: Math.random() * 6 + 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rot: Math.random() * Math.PI,
+          vr: (Math.random() - 0.5) * 0.3,
+          life: 1
+        });
+      }
+    }
+
+    function tick() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => p.life > 0);
+      for (const p of particles) {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.25; p.vx *= 0.99;
+        p.rot += p.vr; p.life -= 0.009;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.globalAlpha = Math.max(p.life, 0);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+        ctx.restore();
+      }
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    // Card pops
+    document.querySelectorAll(".card").forEach(cardEl => {
+      cardEl.addEventListener("click", e => {
+        const popEl = cardEl.querySelector(".pop");
+        popEl.textContent = cardEl.dataset.pop;
+        burst(e.clientX, e.clientY);
+        setTimeout(() => { popEl.textContent = ""; }, 1600);
+      });
+    });
+
+    // Welcome burst
+    setTimeout(() => burst(innerWidth / 2, innerHeight / 3), 500);
+  </script>
+</body>
+</html>
