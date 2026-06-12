@@ -3,88 +3,272 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seleção Nation 🇧🇷 | Brazil Fan Page</title>
-  <link rel="stylesheet" href="style.css">
+  <title>World Cup 2026 Tracker 🏆</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+
+    :root { --green: #009c3b; --yellow: #ffdf00; --blue: #002776; --live: #ff3355; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(-45deg, #00331a, var(--green), #014421, var(--blue));
+      background-size: 400% 400%;
+      animation: drift 14s ease infinite;
+      color: #fff;
+      text-align: center;
+    }
+
+    @keyframes drift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    nav { position: absolute; top: 1rem; right: 1.5rem; z-index: 20; }
+    nav a { color: var(--yellow); font-weight: 700; text-decoration: none; }
+
+    header { padding: 3.5rem 1rem 1.5rem; }
+
+    h1 {
+      font-size: 3rem;
+      background: linear-gradient(90deg, var(--yellow), #fff, var(--yellow));
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 4s linear infinite;
+    }
+
+    @keyframes shimmer { to { background-position: 300% center; } }
+
+    .tagline { margin-top: 0.5rem; opacity: 0.85; }
+
+    #status { margin-top: 0.8rem; font-size: 0.85rem; opacity: 0.7; }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+    section { margin-bottom: 2.5rem; }
+
+    h2 { font-size: 1.6rem; margin-bottom: 1rem; color: var(--yellow); }
+
+    .matches { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.8rem; }
+
+    .match {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      backdrop-filter: blur(8px);
+      text-align: left;
+    }
+
+    .match.live { border-color: var(--live); box-shadow: 0 0 14px rgba(255, 51, 85, 0.5); }
+
+    .match.brazil { border-color: var(--yellow); background: rgba(255, 223, 0, 0.12); }
+
+    .match .row { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+
+    .match .teams { font-weight: 700; font-size: 1.05rem; }
+
+    .match .score { font-weight: 800; font-size: 1.2rem; color: var(--yellow); white-space: nowrap; }
+
+    .match .meta { margin-top: 0.35rem; font-size: 0.82rem; opacity: 0.75; display: flex; justify-content: space-between; }
+
+    .badge {
+      display: inline-block;
+      background: var(--live);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      animation: blink 1.4s ease infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0.55; } }
+
+    .groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.8rem; }
+
+    .group {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      padding: 0.8rem;
+    }
+
+    .group h3 { color: var(--yellow); margin-bottom: 0.5rem; font-size: 1rem; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+
+    th, td { padding: 0.25rem 0.3rem; text-align: left; }
+
+    th { opacity: 0.6; font-weight: 600; }
+
+    td.num, th.num { text-align: center; }
+
+    tr.brazil-row td { color: var(--yellow); font-weight: 700; }
+
+    .empty { opacity: 0.7; padding: 1rem; }
+
+    footer { padding: 2rem; opacity: 0.7; font-size: 0.85rem; }
+  </style>
 </head>
 <body>
-  <canvas id="bg"></canvas>
-
-  <nav style="position:absolute;top:1rem;right:1.5rem;z-index:20"><a href="index.html" style="color:#ffdf00;font-weight:700;text-decoration:none">🎮 Apex Legends page →</a></nav>
+  <nav><a href="index.html">🎮 Apex Legends page →</a></nav>
 
   <header>
-    <h1>Seleção Nation</h1>
-    <p class="tagline">The home of Brazilian football 🇧🇷</p>
-    <div class="stars" title="Five-time world champions">★ ★ ★ ★ ★</div>
-    <p class="countdown-label">World Cup 2026 opener vs Morocco</p>
-    <p id="countdown"></p>
+    <h1>World Cup 2026 Tracker</h1>
+    <p class="tagline">Live scores &amp; standings · Following the Seleção 🇧🇷</p>
+    <p id="status">Loading matches…</p>
   </header>
 
   <main>
-    <section>
-      <h2>Group C — World Cup 2026</h2>
-      <div class="cards">
-        <div class="card match">
-          <span class="flag">🇲🇦</span>
-          <h3>Brazil vs Morocco</h3>
-          <p>June 13 · East Rutherford, NJ</p>
-        </div>
-        <div class="card match">
-          <span class="flag">🇭🇹</span>
-          <h3>Brazil vs Haiti</h3>
-          <p>June 19 · Philadelphia, PA</p>
-        </div>
-        <div class="card match">
-          <span class="flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
-          <h3>Brazil vs Scotland</h3>
-          <p>June 24 · Miami Gardens, FL</p>
-        </div>
-      </div>
+    <section id="live-section" hidden>
+      <h2>🔴 Live Now</h2>
+      <div class="matches" id="live"></div>
     </section>
 
     <section>
-      <h2>Stars of the Squad</h2>
-      <div class="cards">
-        <div class="card player">
-          <h3>Vinícius Júnior</h3>
-          <p>Real Madrid · The spark. Two-time Champions League winner under Ancelotti.</p>
-        </div>
-        <div class="card player">
-          <h3>Neymar Jr</h3>
-          <p>All-time record scorer, back for one more dance at 34.</p>
-        </div>
-        <div class="card player">
-          <h3>Raphinha</h3>
-          <p>Barcelona · Relentless on the right wing.</p>
-        </div>
-        <div class="card player">
-          <h3>Bruno Guimarães</h3>
-          <p>Newcastle · The midfield engine.</p>
-        </div>
-      </div>
-      <p class="note">Coached by Carlo Ancelotti — first foreign manager to lead the Seleção at a World Cup.</p>
+      <h2>🇧🇷 Brazil's Road</h2>
+      <div class="matches" id="brazil"></div>
     </section>
 
     <section>
-      <h2>Five Titles, One Dream</h2>
-      <div class="titles">
-        <span>1958</span><span>1962</span><span>1970</span><span>1994</span><span>2002</span>
-      </div>
-      <p class="note">No nation has more. The hexa awaits. ⭐⭐⭐⭐⭐⭐?</p>
+      <h2>📅 Today</h2>
+      <div class="matches" id="today"></div>
     </section>
 
     <section>
-      <h2>Legends</h2>
-      <p class="legends">Pelé · Garrincha · Zico · Romário · Ronaldo · Rivaldo · Ronaldinho · Kaká · Cafu · Roberto Carlos · Marta</p>
+      <h2>✅ Latest Results</h2>
+      <div class="matches" id="results"></div>
     </section>
 
-    <button id="btn">Torcida! Launch confetti 🎊</button>
-    <p id="count"></p>
+    <section>
+      <h2>⏭️ Coming Up</h2>
+      <div class="matches" id="upcoming"></div>
+    </section>
+
+    <section>
+      <h2>🏆 Group Standings</h2>
+      <div class="groups" id="groups"></div>
+    </section>
   </main>
 
   <footer>
-    <p>Fan-made page · Vai Brasil! 💚💛</p>
+    <p>Fan-made tracker · Data from the open worldcup26 API · Auto-refreshes every minute · Vai Brasil! 💚💛</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    const API = "https://worldcup26.ir/get/games";
+
+    function parseDate(s) {
+      // "06/11/2026 13:00" (MM/DD/YYYY HH:mm, venue-local)
+      const m = s && s.match(/(\d+)\/(\d+)\/(\d+)\s+(\d+):(\d+)/);
+      if (!m) return null;
+      return new Date(+m[3], +m[1] - 1, +m[2], +m[4], +m[5]);
+    }
+
+    function isLive(g) {
+      return g.finished !== "TRUE" && g.time_elapsed && !["null", "", "notstarted", "finished"].includes(String(g.time_elapsed).toLowerCase());
+    }
+
+    function isFinished(g) { return g.finished === "TRUE"; }
+
+    function involvesBrazil(g) {
+      return g.home_team_name_en === "Brazil" || g.away_team_name_en === "Brazil";
+    }
+
+    function card(g) {
+      const live = isLive(g);
+      const fin = isFinished(g);
+      const d = parseDate(g.local_date);
+      const score = (fin || live)
+        ? `${g.home_score ?? "-"} – ${g.away_score ?? "-"}`
+        : (d ? d.toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : g.local_date);
+      const cls = ["match", live ? "live" : "", involvesBrazil(g) ? "brazil" : ""].join(" ").trim();
+      const stage = g.type === "group" ? `Group ${g.group}` : (g.type || "");
+      const liveBadge = live ? ` <span class="badge">LIVE ${/^\d+$/.test(g.time_elapsed) ? g.time_elapsed + "'" : ""}</span>` : "";
+      return `<div class="${cls}">
+        <div class="row">
+          <span class="teams">${g.home_team_name_en} vs ${g.away_team_name_en}</span>
+          <span class="score">${score}</span>
+        </div>
+        <div class="meta"><span>${stage}${liveBadge}</span><span>${fin ? "Full time" : (live ? "In play" : (d ? d.toLocaleDateString([], { weekday: "short" }) : ""))}</span></div>
+      </div>`;
+    }
+
+    function render(id, games, emptyMsg) {
+      const el = document.getElementById(id);
+      el.innerHTML = games.length ? games.map(card).join("") : `<p class="empty">${emptyMsg}</p>`;
+    }
+
+    function standings(games) {
+      const groups = {};
+      for (const g of games) {
+        if (g.type !== "group" || !isFinished(g)) {
+          if (g.type === "group") {
+            // make sure teams appear even with 0 played
+            groups[g.group] = groups[g.group] || {};
+            for (const t of [g.home_team_name_en, g.away_team_name_en]) {
+              groups[g.group][t] = groups[g.group][t] || { team: t, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 };
+            }
+          }
+          continue;
+        }
+        const grp = groups[g.group] = groups[g.group] || {};
+        const hs = +g.home_score, as = +g.away_score;
+        for (const [name, f, a] of [[g.home_team_name_en, hs, as], [g.away_team_name_en, as, hs]]) {
+          const t = grp[name] = grp[name] || { team: name, mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 };
+          t.mp++; t.gf += f; t.ga += a;
+          if (f > a) { t.w++; t.pts += 3; } else if (f === a) { t.d++; t.pts++; } else { t.l++; }
+        }
+      }
+      const el = document.getElementById("groups");
+      el.innerHTML = Object.keys(groups).sort().map(name => {
+        const rows = Object.values(groups[name]).sort((a, b) =>
+          b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga) || b.gf - a.gf || a.team.localeCompare(b.team));
+        return `<div class="group"><h3>Group ${name}</h3><table>
+          <tr><th>Team</th><th class="num">MP</th><th class="num">GD</th><th class="num">Pts</th></tr>
+          ${rows.map(t => `<tr class="${t.team === "Brazil" ? "brazil-row" : ""}">
+            <td>${t.team}</td><td class="num">${t.mp}</td><td class="num">${t.gf - t.ga}</td><td class="num">${t.pts}</td>
+          </tr>`).join("")}
+        </table></div>`;
+      }).join("");
+    }
+
+    async function load() {
+      const status = document.getElementById("status");
+      try {
+        const res = await fetch(API + "?t=" + Date.now());
+        const data = await res.json();
+        const games = (data.games || []).slice();
+        games.sort((a, b) => (parseDate(a.local_date) || 0) - (parseDate(b.local_date) || 0));
+
+        const now = new Date();
+        const todayStr = now.toDateString();
+
+        const live = games.filter(isLive);
+        const today = games.filter(g => { const d = parseDate(g.local_date); return d && d.toDateString() === todayStr; });
+        const finished = games.filter(isFinished).reverse().slice(0, 6);
+        const upcoming = games.filter(g => !isFinished(g) && !isLive(g) && parseDate(g.local_date) > now).slice(0, 6);
+        const brazil = games.filter(involvesBrazil);
+
+        document.getElementById("live-section").hidden = live.length === 0;
+        render("live", live, "");
+        render("brazil", brazil, "No Brazil matches found.");
+        render("today", today, "No matches today.");
+        render("results", finished, "No results yet.");
+        render("upcoming", upcoming, "No upcoming matches.");
+        standings(games);
+
+        status.textContent = "Updated " + now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      } catch (e) {
+        status.textContent = "Couldn't reach the scores API — retrying in a minute.";
+      }
+    }
+
+    load();
+    setInterval(load, 60000);
+  </script>
 </body>
 </html>
